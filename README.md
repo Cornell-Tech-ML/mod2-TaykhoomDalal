@@ -17,3 +17,31 @@ python sync_previous_module.py previous-module-dir current-module-dir
 The files that will be synced are:
 
         minitorch/operators.py minitorch/module.py minitorch/autodiff.py minitorch/scalar.py minitorch/scalar_functions.py minitorch/module.py project/run_manual.py project/run_scalar.py project/datasets.py
+
+## Simple Dataset
+<img src="images/Simple/SimpleDataSet_Model.png">
+<img src="images/Simple/SimpleDataSet_Hyper.png">
+<img src="images/Simple/SimpleDataSet_LossGraph.png">
+<img src="images/Simple/SimpleDataSet_LossTable.png">
+<img src="images/Simple/SimpleDataSet.png">
+
+## Diag Dataset
+<img src="images/Diag/DiagDataSet_Model.png">
+<img src="images/Diag/DiagDataSet_Hyper.png">
+<img src="images/Diag/DiagDataSet_LossGraph.png">
+<img src="images/Diag/DiagDataSet_LossTable.png">
+<img src="images/Diag/DiagDataSet.png">
+
+## Split Dataset
+<img src="images/Split/SplitDataSet_Model.png">
+<img src="images/Split/SplitDataSet_Hyper.png">
+<img src="images/Split/SplitDataSet_LossGraph.png">
+<img src="images/Split/SplitDataSet_LossTable.png">
+<img src="images/Split/SplitDataSet.png">
+
+## XOR Dataset
+<img src="images/XOR/XORDataSet_Model.png">
+<img src="images/XOR/XORDataSet_Hyper.png">
+<img src="images/XOR/XORDataSet_LossGraph.png">
+<img src="images/XOR/XORDataSet_LossTable.png">
+<img src="images/XOR/XORDataSet.png">

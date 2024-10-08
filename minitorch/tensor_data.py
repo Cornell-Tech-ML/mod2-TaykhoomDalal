@@ -68,7 +68,9 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
 
     """
     # TODO: Implement for Task 2.1.
-    proper_shape: UserShape = shape.tolist()
+    # if type(shape) is not np.ndarray:
+    #     shape = np.array(shape)
+    proper_shape: UserShape = list(shape)
     stride = strides_from_shape(proper_shape)
 
     elements_skipped = 0
