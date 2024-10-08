@@ -395,12 +395,12 @@ class Tensor:
             all_dims_tensor = self._ensure_tensor(-1)
             return Sum.apply(self, all_dims_tensor) / self.size
 
-    def permute(self, *dims: TensorLike) -> Tensor:
+    def permute(self, *dims: int) -> Tensor:
         """Permute the dimensions of the tensor."""
-        dims = Tensor.make(list(dims), (len(dims),), backend=self.backend)
-        return Permute.apply(self, dims)
+        tensor_dims = Tensor.make(list(dims), (len(dims),), backend=self.backend)
+        return Permute.apply(self, tensor_dims)
 
-    def view(self, *dims: TensorLike) -> Tensor:
+    def view(self, *dims: int) -> Tensor:
         """View a tensor"""
-        dims = Tensor.make(list(dims), (len(dims),), backend=self.backend)
-        return View.apply(self, dims)
+        tensor_dims = Tensor.make(list(dims), (len(dims),), backend=self.backend)
+        return View.apply(self, tensor_dims)

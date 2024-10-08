@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from .tensor import Tensor
     from .tensor_data import Shape, Storage, Strides
 
+import numpy as np
+
 
 class MapProto(Protocol):
     def __call__(self, x: Tensor, out: Optional[Tensor] = ..., /) -> Tensor:
@@ -269,10 +271,10 @@ def tensor_map(
     ) -> None:
         """Map a function over a tensor."""
         for out_linear_index in range(len(out)):
-            out_index = [0] * len(out_shape)
+            out_index = np.zeros(len(out_shape), dtype=np.int32)
             to_index(out_linear_index, out_shape, out_index)
 
-            in_index = [0] * len(in_shape)
+            in_index = np.zeros(len(in_shape), dtype=np.int32)
 
             broadcast_index(out_index, out_shape, in_shape, in_index)
 
@@ -328,18 +330,18 @@ def tensor_zip(
         # TODO: Implement for Task 2.3.
 
         for out_linear_index in range(len(out)):
-            out_index = [0] * len(out_shape)
+            out_index = np.zeros(len(out_shape), dtype=np.int32)
             to_index(out_linear_index, out_shape, out_index)
 
             # A
-            a_index = [0] * len(a_shape)
+            a_index = np.zeros(len(a_shape), dtype=np.int32)
 
             broadcast_index(out_index, out_shape, a_shape, a_index)
 
             a_linear_index = index_to_position(a_index, a_strides)
 
             # B
-            b_index = [0] * len(b_shape)
+            b_index = np.zeros(len(b_shape), dtype=np.int32)
 
             broadcast_index(out_index, out_shape, b_shape, b_index)
 
@@ -383,7 +385,7 @@ def tensor_reduce(
         # TODO: Implement for Task 2.3.
 
         for out_linear_index in range(len(out)):
-            out_index = [0] * len(out_shape)
+            out_index = np.zeros(len(out_shape), dtype=np.int32)
             to_index(out_linear_index, out_shape, out_index)
 
             a_index = out_index.copy()

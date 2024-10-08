@@ -105,12 +105,12 @@ class All(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, dim: Tensor) -> Tensor:
         """Return 1 if all are true"""
-        dim = int(dim.item())
+        all_dim = int(dim.item())
 
-        if dim == -1:
+        if all_dim == -1:
             return a.f.mul_reduce(a.contiguous().view(int(operators.prod(a.shape))), 0)
         else:
-            return a.f.mul_reduce(a, int(dim.item()))
+            return a.f.mul_reduce(a, all_dim)
 
 
 # TODO: Implement for Task 2.3.
@@ -196,21 +196,18 @@ class Sum(Function):
     @staticmethod
     def forward(ctx: Context, t1: Tensor, dim: Tensor) -> Tensor:
         """Sum function $f(x) = sum(x)$"""
-        dim = int(dim.item())
+        sum_dim = int(dim.item())
 
-        if dim == -1:
-            ctx.save_for_backward(t1.shape, dim)
+        if sum_dim == -1:
             return t1.f.add_reduce(
                 t1.contiguous().view(int(operators.prod(t1.shape))), 0
             )
         else:
-            ctx.save_for_backward(t1.shape, dim)
-            return t1.f.add_reduce(t1, dim)
+            return t1.f.add_reduce(t1, sum_dim)
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         """Sum backward."""
-        (t1_shape, dim) = ctx.saved_values
         return grad_output, 0.0
 
 
