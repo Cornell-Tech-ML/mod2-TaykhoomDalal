@@ -14,7 +14,7 @@ from .autodiff import Context
 from .tensor_ops import SimpleBackend, TensorBackend
 
 if TYPE_CHECKING:
-    from typing import Any, List, Tuple
+    from typing import Any, List, Tuple, Optional, Union
 
     from .tensor import Tensor
     from .tensor_data import UserIndex, UserShape
@@ -103,13 +103,12 @@ class Add(Function):
 
 class All(Function):
     @staticmethod
-    def forward(ctx: Context, a: Tensor, dim: Tensor) -> Tensor:
+    def forward(ctx: Context, a: Tensor, dim: Optional[Tensor] = None) -> Tensor:
         """Return 1 if all are true"""
-        all_dim = int(dim.item())
-
-        if all_dim == -1:
+        if dim is None:
             return a.f.mul_reduce(a.contiguous().view(int(operators.prod(a.shape))), 0)
         else:
+            all_dim = int(dim.item())
             return a.f.mul_reduce(a, all_dim)
 
 
@@ -194,21 +193,29 @@ class Exp(Function):
 
 class Sum(Function):
     @staticmethod
-    def forward(ctx: Context, t1: Tensor, dim: Tensor) -> Tensor:
+    def forward(ctx: Context, t1: Tensor, dim: Optional[Tensor] = None) -> Tensor:
         """Sum function $f(x) = sum(x)$"""
-        sum_dim = int(dim.item())
-
-        if sum_dim == -1:
+        if dim is None:
+            ctx.save_for_backward(dim)
             return t1.f.add_reduce(
                 t1.contiguous().view(int(operators.prod(t1.shape))), 0
             )
         else:
+            sum_dim = int(dim.item())
+            ctx.save_for_backward(sum_dim)
             return t1.f.add_reduce(t1, sum_dim)
 
     @staticmethod
-    def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
+    def backward(
+        ctx: Context, grad_output: Tensor
+    ) -> Union[Tensor, Tuple[Tensor, float]]:
         """Sum backward."""
-        return grad_output, 0.0
+        (dim,) = ctx.saved_values
+
+        if dim is None:
+            return grad_output
+        else:
+            return grad_output, 0.0
 
 
 class LT(Function):

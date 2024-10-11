@@ -342,16 +342,13 @@ class Tensor:
         """Multiplication of two tensors"""
         return Mul.apply(self._ensure_tensor(b), self)
 
-    def all(self, dim: Optional[TensorLike] = None) -> Tensor:
+    def all(self, dim: Optional[int] = None) -> Tensor:
         """All elements of a tensor"""
         if dim is not None:
             dim_tensor = self._ensure_tensor(dim)
             return All.apply(self, dim_tensor)
         else:
-            # all elements by passing a special value using -1
-            # Wrap -1 as a Tensor
-            all_dims_tensor = self._ensure_tensor(-1)
-            return All.apply(self, all_dims_tensor)
+            return All.apply(self)
 
     def is_close(self, b: TensorLike) -> Tensor:
         """Check if two tensors are close"""
@@ -379,10 +376,8 @@ class Tensor:
             dim_tensor = self._ensure_tensor(dim)
             return Sum.apply(self, dim_tensor)
         else:
-            # sum over all elements by passing a special value using -1
-            # Wrap -1 as a Tensor
-            all_dims_tensor = self._ensure_tensor(-1)
-            return Sum.apply(self, all_dims_tensor)
+            # sum over all elements
+            return Sum.apply(self)
 
     def mean(self, dim: Optional[int] = None) -> Tensor:
         """Mean of a tensor"""
@@ -390,10 +385,8 @@ class Tensor:
             dim_tensor = self._ensure_tensor(dim)
             return Sum.apply(self, dim_tensor) / self.size
         else:
-            # mean over all elements by passing a special value using -1
-            # Wrap -1 as a Tensor
-            all_dims_tensor = self._ensure_tensor(-1)
-            return Sum.apply(self, all_dims_tensor) / self.size
+            # mean over all elements
+            return Sum.apply(self) / self.size
 
     def permute(self, *dims: int) -> Tensor:
         """Permute the dimensions of the tensor."""
